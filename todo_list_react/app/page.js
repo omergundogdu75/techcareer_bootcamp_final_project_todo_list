@@ -1,8 +1,18 @@
+import Body from '@/components/body/Body'
+import Header from '@/components/header/Header'
 import React from 'react'
+import styles from './page.module.css'
 
 const page = () => {
   return (
-    <div>TodoList</div>
+    <div className={styles.mainContent}>
+      <div className={styles.headerContent}>
+        <Header/>
+      </div>
+      <div className={styles.bodyContent}>
+        <Body/>
+      </div>
+    </div>
   )
 }
 
