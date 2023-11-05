@@ -7,12 +7,13 @@
 
 .headerContent{
   display: flex;
+  flex-direction: column ;
   width: 100%;
   flex: 1;
   justify-content: center;
   align-items: center;
-  padding: 10px;
-  border: 1px solid black;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .bodyContent{

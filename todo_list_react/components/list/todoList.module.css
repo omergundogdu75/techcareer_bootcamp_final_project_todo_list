@@ -1,0 +1,75 @@
+.main{
+display: flex;
+width: 100%;
+flex:1;
+flex-direction: column;
+
+}
+
+.filterArea{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+}
+
+.filterButtons{
+    flex: 1;
+}
+
+.filterButtons:hover{
+    background-color: red;
+    color: white;
+}
+
+.deleteButtons{
+    flex: 1;
+
+}
+.deleteButtons:hover{
+    background-color: grey;
+    color: white;
+}
+
+.listTodo{
+    display: flex;
+    flex-direction: column;
+    height: 50vh;
+    overflow-y: scroll;
+    padding-top: 15px;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.item{
+    flex:1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border: 1px solid gray;
+    padding: 15px;
+    margin: 5px;
+    margin-right: 10px;
+}
+
+.content{
+    flex: 8;
+    text-decoration: none;
+}
+.contentDrawText{
+    flex: 8;
+    text-decoration: line-through;
+}
+
+.actions{
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.checkbox{
+    height: 20px;
+    width: 50px;
+}

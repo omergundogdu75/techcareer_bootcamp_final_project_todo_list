@@ -1,6 +1,6 @@
 import React from "react";
-import 'bootstrap/dist/css/bootstrap.css';
-
+import "bootstrap/dist/css/bootstrap.css";
+import { DataProvider } from '../context/DataContext';
 
 const metadata = {
   title: "Create Next App",
@@ -11,8 +11,10 @@ function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
+        <DataProvider>
         {children}
-        </body>
+        </DataProvider>
+      </body>
     </html>
   );
 }
