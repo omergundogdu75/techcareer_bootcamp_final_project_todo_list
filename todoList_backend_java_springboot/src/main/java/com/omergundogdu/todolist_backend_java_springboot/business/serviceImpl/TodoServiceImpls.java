@@ -59,8 +59,7 @@ public class TodoServiceImpls implements TodoService {
     }
 
     @Override
-    public boolean deleteTodoByDoneTrue(Todo entities) {
-            todoRepository.deleteAll(entities.isDone());
-            return true;
+    public void deleteAllByDone() {
+            todoRepository.deleteAllByDone(true);
     }
 }

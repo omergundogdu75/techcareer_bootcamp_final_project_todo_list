@@ -22,5 +22,5 @@ export const getAll = () => {
   };
 
   export const deleteAllDoneData = () => {
-    return axios.post("/api/v1.0.0/todo/doneDelete");
+    return axios.delete("/api/v1.0.0/todo/doneDelete");
   };

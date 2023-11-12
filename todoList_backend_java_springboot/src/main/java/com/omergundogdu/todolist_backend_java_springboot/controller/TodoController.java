@@ -4,6 +4,7 @@ import com.omergundogdu.todolist_backend_java_springboot.business.service.TodoSe
 import com.omergundogdu.todolist_backend_java_springboot.models.entities.Todo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,7 +12,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1.0.0/todo")
 @RequiredArgsConstructor
-@CrossOrigin
 public class TodoController {
 
     private final TodoService todoService;
@@ -49,9 +49,10 @@ public class TodoController {
         return todoService.deleteAll();
     }
 
-    @PostMapping("/doneDelete")
-    public Boolean deleteAllDone(){
-        return todoService.deleteTodoByDoneTrue();
+    @Transactional
+    @DeleteMapping("/doneDelete")
+    public void deleteAllDone(){
+         todoService.deleteAllByDone();
     }
 
 }
