@@ -1,30 +1,65 @@
 "use client";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import TodoData from "./Data.js";
+import { deleteAllData, getAll, deleteAllDoneData } from "@/api/TodoApi.js";
 
 const DataContext = createContext();
 
 export function DataProvider({ children }) {
-  const [datas, setDatas] = useState(TodoData);
+  const [datas, setDatas] = useState([]);
+  const [copyData, setCopyData] = useState([]);
+  const [change, setChange] = useState(false);
+
+  const fetchDatas = async () => {
+    const allData = await getAll().then((data) => {
+      setDatas(data.data);
+      setCopyData(data.data);
+    });
+  };
 
   useEffect(() => {
-    console.log("Data loaded: ", datas);
-  }, [datas]);
+    fetchDatas();
+  }, [change]);
 
   const allFilter = () => {
-    setDatas(TodoData);
+    fetchDatas();
+    console.log(datas);
   };
   const todoFilter = () => {
-    setDatas(TodoData.filter((data) => !data.isDone));
+    setDatas(copyData.filter((data) => !data.done));
+    console.log(datas);
   };
 
   const doneFilter = () => {
-    setDatas(TodoData.filter((data) => data.isDone));
+    setDatas(copyData.filter((data) => data.done));
+    console.log(datas);
+  };
+
+  const deleteAll = async () => {
+    await deleteAllData();
+    setChange(!change);
+    alert("All data deleted!")
+  };
+
+  const deleteAllDone = async () => {
+    await deleteAllDoneData();
+    setChange(!change);
+    alert("All done data deleted!")
+
   };
 
   return (
     <DataContext.Provider
-      value={{ datas, setDatas, allFilter, todoFilter, doneFilter }}
+      value={{
+        datas,
+        setDatas,
+        allFilter,
+        todoFilter,
+        doneFilter,
+        change,
+        setChange,
+        deleteAll,
+        deleteAllDone,
+      }}
     >
       {children}
     </DataContext.Provider>

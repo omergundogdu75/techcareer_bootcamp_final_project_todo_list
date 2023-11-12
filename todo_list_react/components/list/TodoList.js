@@ -4,52 +4,63 @@ import styles from "./todoList.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { useDataContext } from "@/context/DataContext";
+import { deleteData, update } from "@/api/TodoApi";
 
 const TodoList = () => {
-  const { datas, setDatas,allFilter,todoFilter,doneFilter } = useDataContext();
+  const {
+    datas,
+    setDatas,
+    allFilter,
+    todoFilter,
+    doneFilter,
+    change,
+    setChange,
+    deleteAll,
+    deleteAllDone
+  } = useDataContext();
 
-  function handleEditClick(data, index) {
-    const change = prompt("Düzenle: ", data.todoContent);
+  async function handleEditClick(data, index) {
+    const changeData = prompt("Düzenle: ", data.todoContent);
 
-    if (change !== null) {
-      const editDatas = [...datas]; // datas dizisinin bir kopyasını oluştur
-      editDatas[index].todoContent = change;
-      setDatas(editDatas);
-      alert("Edit işlemi gerçekleşti:", editDatas);
+    if (changeData !== null) {
+      datas[index].todoContent = changeData;
+      await update(datas[index]);
     } else {
       console.log("Herhangi bir değişiklik yapılmadı");
     }
-    // Edit işlemi burada gerçekleştirilir
+    setChange(!change);
   }
 
-  function handleDeleteClick(data) {
+  async function handleDeleteClick(data, index) {
+    console.log(datas[index]);
     const confirmed = confirm("Bu öğeyi silmek istediğinize emin misiniz?");
+    console.log(confirmed);
+
     if (confirmed) {
       // Silme işlemi burada gerçekleştirilir
-      const deleteDatas = datas.filter((item) => item.id !== data.id);
-      setDatas(deleteDatas);
-      alert("Silme işlemi gerçekleşti:", deleteDatas);
+      await deleteData(datas[index]);
+      setChange(!change);
+      alert("Silme işlemi gerçekleşti:");
     } else {
       alert("Silme işlemi iptal edildi:");
     }
   }
 
-  function handleCheckboxChange(event, data, index) {
+  async function handleCheckboxChange(event, data, index) {
     // Checkbox'ın yeni durumunu kontrol etmek, için event.target.checked'i kullanabilirsiniz.
     const isChecked = event.target.checked;
-    const updatedDatas = [...datas]; // datas dizisinin bir kopyasını oluştur
 
     // isChecked değerine göre istediğiniz işlemleri yapabilirsiniz.
     if (isChecked) {
-      // Checkbox işaretlendiğinde yapılacak işlemler
-      updatedDatas[index].isDone = true;
-      console.log("Checkbox işaretlendi.");
+      datas[index].done = true;
+      await update(datas[index]);
+      alert(datas[index].todoContent + " yapıldı olarak işaretlendi.");
     } else {
-      updatedDatas[index].isDone = false;
-      // Checkbox işareti kaldırıldığında yapılacak işlemler
-      console.log("Checkbox işareti kaldırıldı.");
+      datas[index].done = false;
+      await update(datas[index]);
+      alert(datas[index].todoContent + " yapılmadı olarak işaretlendi.");
     }
-    setDatas(updatedDatas); // Güncellenmiş diziyi ayarla
+    setChange(!change); // Güncellenmiş diziyi ayarla
   }
 
   const handleFilter = (e) => {
@@ -62,6 +73,12 @@ const TodoList = () => {
         break;
       case "todo":
         todoFilter();
+        break;
+      case "deleteAll":
+        deleteAll();
+        break;
+      case "deleteAllDone":
+        deleteAllDone();
         break;
     }
   };
@@ -102,7 +119,7 @@ const TodoList = () => {
           <div key={data.id} className={styles.item}>
             {/*  todoContent text */}
             <div
-              className={data.isDone ? styles.contentDrawText : styles.content}
+              className={data.done ? styles.contentDrawText : styles.content}
             >
               {data.todoContent}
             </div>
@@ -113,7 +130,7 @@ const TodoList = () => {
               <input
                 type="checkbox"
                 className={styles.checkbox}
-                checked={data.isDone}
+                checked={data.done}
                 onChange={(event) => handleCheckboxChange(event, data, index)}
               />
 
@@ -132,7 +149,7 @@ const TodoList = () => {
               {/* //delete */}
               <button
                 className="btn btn-transparent"
-                onClick={() => handleDeleteClick(data)}
+                onClick={() => handleDeleteClick(data, index)}
               >
                 {" "}
                 <FontAwesomeIcon
@@ -150,12 +167,16 @@ const TodoList = () => {
         <button
           className={"btn btn-danger " + styles.deleteButtons}
           type="button"
+          id="deleteAllDone"
+          onClick={handleFilter}
         >
           Delete done tasks
         </button>
         <button
           className={"btn btn-danger " + styles.deleteButtons}
           type="button"
+          id="deleteAll"
+          onClick={handleFilter}
         >
           Delete all tasks
         </button>

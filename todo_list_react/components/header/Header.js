@@ -4,27 +4,29 @@ import React,{useState} from "react";
 import styles from "./header.module.css";
 import { faList } from "@fortawesome/free-solid-svg-icons";
 import { useDataContext } from "../../context/DataContext";
+import { save } from "@/api/TodoApi";
 
 const Header = () => {
-  const {datas, setDatas} = useDataContext();
+  const {datas, setDatas,change, setChange} = useDataContext();
   const [inputValue, setInputValue] = useState(""); // Boş bir değerle başlatın
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value); // Input değerini state'e kaydedin
   };
 
-  const handleAddItem = () => {
+  const handleAddItem = async () => {
     if (inputValue.trim() !== "") {
       const newData = {
-        id: datas.length + 1,
         todoContent: inputValue.trim(),
         isDone: false
       };
+
+      const saveData = await save(newData).then(res => {
+        setChange(!change);
+        setInputValue("")
+        alert("Eklenen değer: " + res.data.todoContent);
+      });
   
-      setDatas([...datas, newData]);
-      setInputValue("")
-     alert("Eklenen değer: " + newData.todoContent);
-     
     } else {
       alert("Eklemek için bir değer girmelisiniz.");
     }
@@ -49,7 +51,7 @@ const Header = () => {
       <button
         className={"btn btn-secondary " + styles.addTodoBtn}
         type="button"
-        onClick={handleAddItem} // onClick içindeki fonksiyonu doğrudan çağırmak yeterlidir
+        onClick={handleAddItem} 
       >
         Add
       </button>
