@@ -27,7 +27,7 @@ public class TodoServiceImpls implements TodoService {
 
     @Override
     public List<Todo> getAll() {
-        return todoRepository.findAll(Sort.by(Sort.Order.asc("id")));
+        return todoRepository.findAllByOrderByIdDesc();
     }
 
     @Override

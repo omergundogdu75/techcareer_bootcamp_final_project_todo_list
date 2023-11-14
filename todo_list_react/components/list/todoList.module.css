@@ -72,3 +72,10 @@ flex-direction: column;
     height: 20px;
     width: 50px;
 }
+
+.information{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    flex-direction: column;
+}
